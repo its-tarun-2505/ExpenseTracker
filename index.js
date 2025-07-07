@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", displayExp);
 let isEditing = false;
 let editingExpId = null;
 
+// Load and display all expenses from localStorage
 function displayExp() {
   const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
   expenses.forEach(display);
 }
 
+// Form submit handler
 function formSubmit(event) {
   event.preventDefault();
 
@@ -18,6 +20,7 @@ function formSubmit(event) {
   let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
   if (isEditing) {
+    // Update existing expense
     expenses = expenses.map(expense => {
       if (expense.id === editingExpId) {
         return { ...expense, amount, description, category };
@@ -32,6 +35,7 @@ function formSubmit(event) {
     isEditing = false;
     editingExpId = null;
   } else {
+    // Add new expense
     const newExpense = {
       id: Date.now(),
       amount,
@@ -47,6 +51,7 @@ function formSubmit(event) {
   event.target.reset();
 }
 
+// Display a single expense item on screen
 function display(expense) {
   const ul = document.getElementById('exp-display');
   const li = document.createElement('li');
@@ -65,6 +70,7 @@ function display(expense) {
   ul.appendChild(li);
 }
 
+// Delete an expense from screen and localStorage
 function deleteExpense(li, expID) {
   let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
   expenses = expenses.filter(expense => expense.id !== expID);
@@ -72,6 +78,7 @@ function deleteExpense(li, expID) {
   li.remove();
 }
 
+// Edit an expense (prefill form and prepare to update)
 function editExpense(li, expID) {
   const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
   const expenseToEdit = expenses.find(expense => expense.id === expID);
